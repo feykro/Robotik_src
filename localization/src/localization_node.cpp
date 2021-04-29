@@ -189,7 +189,7 @@ public:
                     if (cell_value(loop_x, loop_y) == 0)
                     { // robair can only be at a free cell
                         int score_current = compute_score(loop_x, loop_y, o);
-                        //ROS_INFO("(%f, %f, %f): score = %i", loop_x, loop_y, o * 180 / M_PI, score_current);
+                        ROS_INFO("(%f, %f, %f): score = %i", loop_x, loop_y, o * 180 / M_PI, score_current);
 
                         if (score_current > score_max)
                         {
@@ -237,12 +237,12 @@ public:
         //estimation of the positions closed to the predicted_position
         float min_x, max_x, min_y, max_y, min_orientation, m ax_orientation;
         ROS_INFO("possible positions to tests: (%f, %f, %f) -> (%f, %f, %f)", min_x, min_y, min_orientation * 180 / M_PI, max_x, max_y, max_orientation * 180 / M_PI);
-
+        //Note: on peut changer les 0.5 pour modifier la zone de recherche
         min_x = predicted_position.x - 0.5;
         min_y = predicted_position.y - 0.5;
         max_x = predicted_position.x + 0.5;
         max_y = predicted_position.y + 0.5;
-
+        //Note : on peut remplacer la valeur 15 pour modif. la zone de recherche
         min_orientation = predicted_orientation - 15 * M_PI / 180;
         max_orientation = predicted_orientation + 15 * M_PI / 180;
 
@@ -269,15 +269,6 @@ public:
                 }
             }
         }
-        /*loop over all the possible positions (x, y, theta) {
-     * the increment on x and y is of 5cms and on theta is of 5 degrees
-        if ( cell_value(loop_x, loop_y) == 0 ) { // robair can only be at a free cell
-            int score_current = compute_score(loop_x, loop_y, o);
-            ROS_INFO("(%f, %f, %f): score = %i", loop_x, loop_y, o, score_current);
-            populateMarkerTopic();
-            //we store the maximum score over all the possible positions in estimated_position
-        }
-    }*/
 
         ROS_INFO("relocalization done");
     }
@@ -319,8 +310,6 @@ public:
             geometry_msgs::Point hit;
             hit.x = x + r[i] * cos(o + theta[i]);
             hit.y = y + r[i] * sin(o + theta[i]);
-            //hit.x = ...;
-            //hit.y = ..;
 
             // we add the current hit to the hits to display
             display[nb_pts].x = hit.x;
